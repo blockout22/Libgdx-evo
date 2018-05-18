@@ -1,9 +1,6 @@
 package com.blockout22.evolution;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -34,8 +31,9 @@ public class Evolution extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-//	    Gdx.gl.glEnable(GL20.GL_CULL_FACE);
-//	    Gdx.gl.glCullFace(GL20.GL_FRONT);
+        System.out.println("Libgdx Version: " + Version.VERSION);
+	    Gdx.gl.glEnable(GL20.GL_CULL_FACE);
+	    Gdx.gl.glCullFace(GL20.GL_FRONT);
         VisUI.load(VisUI.SkinScale.X2);
         Statics.init();
 //        Statics.camera.position.set(320, 240, 0);

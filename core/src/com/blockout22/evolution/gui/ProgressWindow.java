@@ -33,7 +33,6 @@ public class ProgressWindow extends VisWindow {
             setPosition(0, 0);
         }
         if(showing){
-            System.out.println("Drawing");
             stage.draw();
         }
     }
