@@ -21,7 +21,9 @@ public class Evolution extends ApplicationAdapter {
 	private Hud hud;
 	private ProgressWindow assetLoadingWindow;
 
+	private WaterRender water;
 	private WorldMap worldMap;
+
 
 	private InputAdapter input;
 
@@ -63,12 +65,12 @@ public class Evolution extends ApplicationAdapter {
         overlay = new Stage(Statics.viewport);
         hud = new Hud("Hud");
 
+        water = new WaterRender();
         worldMap = new WorldMap();
         int maxXRange = worldMap.getMapXSize() * MapTile.getGridSize();
         int maxYRange = worldMap.getMapYSize() * MapTile.getGridSize();
         Vector3 pos = new Vector3((int)(Math.random() * maxXRange), (int)(Math.random() * maxYRange), 0);
         Statics.camera.position.set(pos);
-        Statics.camera.position.set(0, 0, 0);
 
         overlay.addActor(hud);
 
@@ -121,6 +123,8 @@ public class Evolution extends ApplicationAdapter {
 	        e1.transform.position.x += 3.1f;
 //        }
 
+        water.render();
+
 	    batch.setProjectionMatrix(Statics.camera.combined);
 	    batch.begin();
         {
@@ -155,6 +159,7 @@ public class Evolution extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
+        water.dispose();
 	    assetLoadingWindow.dispose();
 	    Statics.dispose();
 	    batch.dispose();

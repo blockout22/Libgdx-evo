@@ -25,7 +25,8 @@ public class Statics {
     public static String    TEXTURE_FEMALE = "female.jpg",
                             TEXTURE_MALE = "male.png",
                             TEXTURE_GRASS = "grass.png",
-                            TEXTURE_DIRT = "dirt.png";
+                            TEXTURE_DIRT = "dirt.png",
+                            TEXTURE_WATER = "water.jpg";
 
     public static void init()
     {
@@ -37,6 +38,7 @@ public class Statics {
         assetManager.load(TEXTURE_FEMALE, Texture.class);
         assetManager.load(TEXTURE_GRASS, Texture.class);
         assetManager.load(TEXTURE_DIRT, Texture.class);
+        assetManager.load(TEXTURE_WATER, Texture.class);
 //        assetManager.finishLoading();
     }
 

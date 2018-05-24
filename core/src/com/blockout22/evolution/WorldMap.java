@@ -15,7 +15,10 @@ public class WorldMap {
     public WorldMap() {
         for(int x = 0; x < tileMap.length; x++){
             for(int y = 0; y < tileMap[x].length; y++){
-                if(Math.random() < 0.5f){
+                double r = Math.random();
+                if(r < 0.2){
+                    continue;
+                }else if(r < 0.5){
                     tileMap[x][y] = new MapTileGrass(x, y);
                 }else{
                     tileMap[x][y] = new MapTileDirt(x, y);
@@ -57,6 +60,9 @@ public class WorldMap {
         for (int x = tileMap.length - 1; x >= 0; x--) {
             for(int y = tileMap[x].length - 1; y >= 0; y--) {
                 MapTile t = tileMap[x][y];
+                if(t == null){
+                    continue;
+                }
                 if (Statics.camera.frustum.boundsInFrustum(t.getBoundingBox())) {
                     if (t.getGridX() == tileX && t.getGridY() == tileY) {
                         batch.setColor(Color.GRAY);
