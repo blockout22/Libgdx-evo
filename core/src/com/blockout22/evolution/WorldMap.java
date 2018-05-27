@@ -26,6 +26,8 @@ public class WorldMap {
             }
         }
 
+        System.out.println("World Size: " + (tileMap.length * MapTile.getGridSize()) + ", " + (tileMap[0].length * MapTile.getGridSize()));
+
 //        int t = 50;
 //        for (int i = -t; i < t; i++) {
 //            for (int j = -t; j < t; j++) {
@@ -40,6 +42,10 @@ public class WorldMap {
 //            }
 //        }
 
+    }
+
+    public MapTile[][] getTileMap() {
+        return tileMap;
     }
 
     public int getMapXSize(){

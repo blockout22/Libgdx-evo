@@ -3,6 +3,7 @@ package com.blockout22.evolution;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -27,8 +28,8 @@ public class Evolution extends ApplicationAdapter {
 
 	private InputAdapter input;
 
-	private Array<Entity> entities = new Array<Entity>();
-    EntityHumanFemale e1;
+	public static Array<Entity> entities = new Array<Entity>();
+    private EntityHumanFemale e1;
 	int counter = 0;
 	
 	@Override
@@ -80,7 +81,26 @@ public class Evolution extends ApplicationAdapter {
         e1 = new EntityHumanFemale();
 //        e1.transform.scale.set(1, 1);
 //        e1.transform.size.set(1, 1);
-        entities.add(e1);
+//        entities.add(e1);
+    }
+
+    public boolean entityOnTile(Entity e){
+        Vector2 ePos = e.transform.position;
+        int tileX = (int)(ePos.x) / MapTile.getGridSize();
+        int tileY = (int)(ePos.y) / MapTile.getGridSize();
+        MapTile tile = null;
+        try{
+           tile = worldMap.getTileMap()[tileX][tileY];
+        }catch(ArrayIndexOutOfBoundsException e1){
+            return false;
+        }
+
+        if(tile != null){
+            return true;
+//            if(tile.)
+        }
+
+            return false;
     }
 
 
@@ -132,7 +152,9 @@ public class Evolution extends ApplicationAdapter {
             worldMap.render(batch);
             //render entities
             for(Entity e : entities){
-                batch.draw(e.getSprite(), e.transform.position.x, e.transform.position.y);
+//                batch.draw(e.getSprite(), e.transform.position.x, e.transform.position.y);
+                Statics.batchRenderTextureTransform(batch, e);
+                e.update();
 //                batch.draw(e.getSprite(), e.transform.position.x, e.transform.position.y, 0, 0, e.transform.size.x, e.transform.size.y, e.transform.scale.x, e.transform.scale.y, e.transform.rotation);
 //                    Statics.batchRenderTextureTransform(batch, e);
             }

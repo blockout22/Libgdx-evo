@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.blockout22.evolution.entity.EntityHumanFemale;
 
 public class DesktopInput extends InputAdapter {
 
@@ -30,6 +31,12 @@ public class DesktopInput extends InputAdapter {
             Vector3 pos = new Vector3((int)(Math.random() * maxXRange), (int)(Math.random() * maxYRange), 0);
             Statics.camera.position.set(pos);
             return true;
+        }
+
+        if(keycode == Input.Keys.G){
+            EntityHumanFemale e = new EntityHumanFemale();
+            e.transform.position.set(Statics.camera.position.x, Statics.camera.position.y);
+            Evolution.entities.add(e);
         }
 
         if(keycode == Input.Keys.L){
