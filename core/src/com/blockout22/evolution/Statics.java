@@ -7,17 +7,24 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 import java.util.Random;
 
 public class Statics {
 
+    public static String GAME_NAME = "Game Name";
+    public static String VERSION = "0.0.0";
+
     public final static ExtendViewport viewport = new ExtendViewport(640, 480);
     public final static Camera camera = new OrthographicCamera(viewport.getWorldWidth(), viewport.getWorldHeight());
     public final static AssetManager assetManager = new AssetManager();
     public final static Random random = new Random();
     public static Color defaultColor = new Color(1, 1, 1, 1);
+    private static Vector2 actorPosVec = new Vector2();
 
 //    public static Array<Entity> entities;
 
@@ -28,9 +35,15 @@ public class Statics {
                             TEXTURE_DIRT = "dirt.png",
                             TEXTURE_WATER = "water.jpg";
 
+    public static String    SKIN_UI = "uiSkin/uiskin.json";
+
     public static void init()
     {
  //        entities = new Array<Entity>();
+
+        //load the ui skin first which will be used to display the loading screen
+        assetManager.load(SKIN_UI, Skin.class);
+        assetManager.finishLoading();
 
         assetManager.load("badlogic.jpg", Texture.class);
 //        assetManager.finishLoading();
@@ -39,7 +52,6 @@ public class Statics {
         assetManager.load(TEXTURE_GRASS, Texture.class);
         assetManager.load(TEXTURE_DIRT, Texture.class);
         assetManager.load(TEXTURE_WATER, Texture.class);
-//        assetManager.finishLoading();
     }
 
     public static void load(String asset, Class type)
@@ -72,6 +84,24 @@ public class Statics {
         float dx = v1.x - v2.x;
         float dy = v1.y - v2.y;
         return (float) Math.sqrt(dx * dx + dy * dy);
+    }
+
+    /**
+     * moves the actor to a position relative to the size of the window not the viewport
+     * @param vp
+     * @param actor
+     * @param x
+     * @param y
+     */
+
+    private static Vector3 tmp = new Vector3();
+    public static void moveActorToBottomLeft(Camera c, ExtendViewport vp, Actor actor){
+        //sets the position to the bottom left
+//        actorPosVec.set(0, 0);
+//        vp.unproject(actorPosVec);
+        tmp = c.unproject(new Vector3(0, 0, 0), vp.getScreenX(), vp.getScreenY(), vp.getScreenWidth(), vp.getScreenHeight());
+        actor.setX(tmp.x);
+        actor.setY(vp.getMinWorldHeight() - tmp.y);
     }
 
     /**

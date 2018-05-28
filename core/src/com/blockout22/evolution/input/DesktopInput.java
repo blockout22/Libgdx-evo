@@ -1,4 +1,4 @@
-package com.blockout22.evolution;
+package com.blockout22.evolution.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.blockout22.evolution.Evolution;
+import com.blockout22.evolution.MapTile;
+import com.blockout22.evolution.Statics;
 import com.blockout22.evolution.entity.EntityHumanFemale;
 
 public class DesktopInput extends InputAdapter {

@@ -6,25 +6,34 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.blockout22.evolution.entity.Entity;
 import com.blockout22.evolution.entity.EntityHumanFemale;
+import com.blockout22.evolution.gui.DebugInfo;
 import com.blockout22.evolution.gui.Hud;
 import com.blockout22.evolution.gui.ProgressWindow;
+import com.blockout22.evolution.input.DesktopInput;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
 
 public class Evolution extends ApplicationAdapter {
 
     private boolean loadedSetup = false;
+
+    private DebugInfo debugInfo;
 
 	private SpriteBatch batch;
 	private Stage overlay;
 	private Hud hud;
 	private ProgressWindow assetLoadingWindow;
 
+	private Skin uiSkin;
+
 	private WaterRender water;
 	private WorldMap worldMap;
 
+	private VisLabel textInfo;
 
 	private InputAdapter input;
 
@@ -37,8 +46,9 @@ public class Evolution extends ApplicationAdapter {
         System.out.println("Libgdx Version: " + Version.VERSION);
 	    Gdx.gl.glEnable(GL20.GL_CULL_FACE);
 	    Gdx.gl.glCullFace(GL20.GL_FRONT);
-        VisUI.load(VisUI.SkinScale.X2);
         Statics.init();
+        uiSkin = Statics.assetManager.get(Statics.SKIN_UI, Skin.class);
+        VisUI.load(VisUI.SkinScale.X2);
 //        Statics.camera.position.set(320, 240, 0);
         assetLoadingWindow = new ProgressWindow("Loading...");
         batch = new SpriteBatch();
@@ -63,6 +73,7 @@ public class Evolution extends ApplicationAdapter {
 
 	private void load()
     {
+        debugInfo = new DebugInfo();
         overlay = new Stage(Statics.viewport);
         hud = new Hud("Hud");
 
@@ -73,10 +84,16 @@ public class Evolution extends ApplicationAdapter {
         Vector3 pos = new Vector3((int)(Math.random() * maxXRange), (int)(Math.random() * maxYRange), 0);
         Statics.camera.position.set(pos);
 
-        overlay.addActor(hud);
+//        overlay.addActor(hud);
+
+        textInfo = new VisLabel();
+        textInfo.setX(0);
+        overlay.addActor(textInfo);
+        System.out.println(textInfo.getPrefHeight());
+        textInfo.setY(Gdx.graphics.getHeight() - textInfo.getPrefHeight() / 2);
 
         Statics.camera.update();
-        Gdx.input.setInputProcessor(new InputMultiplexer(overlay, input));
+        Gdx.input.setInputProcessor(new InputMultiplexer(overlay, debugInfo.getStage(), input));
 
         e1 = new EntityHumanFemale();
 //        e1.transform.scale.set(1, 1);
@@ -162,10 +179,13 @@ public class Evolution extends ApplicationAdapter {
         }
         batch.end();
 
+        textInfo.setText("FPS: " + Gdx.graphics.getFramesPerSecond() + " Counter Population: " + entities.size);
+
 
         //render overlay
+        debugInfo.draw();
 //        overlay.act();
-//        overlay.draw();
+        overlay.draw();
 
         assetLoadingWindow.setShowing(loading, false);
 
@@ -181,6 +201,8 @@ public class Evolution extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
+        debugInfo.dispose();
+        uiSkin.dispose();
         water.dispose();
 	    assetLoadingWindow.dispose();
 	    Statics.dispose();

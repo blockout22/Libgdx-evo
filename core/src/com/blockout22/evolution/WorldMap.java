@@ -16,9 +16,7 @@ public class WorldMap {
         for(int x = 0; x < tileMap.length; x++){
             for(int y = 0; y < tileMap[x].length; y++){
                 double r = Math.random();
-                if(r < 0.2){
-                    continue;
-                }else if(r < 0.5){
+                if(r < 0.5){
                     tileMap[x][y] = new MapTileGrass(x, y);
                 }else{
                     tileMap[x][y] = new MapTileDirt(x, y);
