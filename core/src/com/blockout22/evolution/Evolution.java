@@ -183,7 +183,7 @@ public class Evolution extends ApplicationAdapter {
 
 
         //render overlay
-        debugInfo.draw();
+//        debugInfo.draw();
 //        overlay.act();
         overlay.draw();
 

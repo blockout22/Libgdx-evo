@@ -33,7 +33,7 @@ public class Statics {
                             TEXTURE_MALE = "male.png",
                             TEXTURE_GRASS = "grass.png",
                             TEXTURE_DIRT = "dirt.png",
-                            TEXTURE_WATER = "water.jpg";
+                            TEXTURE_WATER = "water.png";
 
     public static String    SKIN_UI = "uiSkin/uiskin.json";
 
