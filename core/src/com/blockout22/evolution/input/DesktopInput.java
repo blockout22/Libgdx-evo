@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.blockout22.evolution.Evolution;
 import com.blockout22.evolution.MapTile;
 import com.blockout22.evolution.Statics;
 import com.blockout22.evolution.entity.EntityHumanFemale;
@@ -39,7 +38,7 @@ public class DesktopInput extends InputAdapter {
         if(keycode == Input.Keys.G){
             EntityHumanFemale e = new EntityHumanFemale();
             e.transform.position.set(Statics.camera.position.x, Statics.camera.position.y);
-            Evolution.entities.add(e);
+            Statics.entities.add(e);
         }
 
         if(keycode == Input.Keys.L){

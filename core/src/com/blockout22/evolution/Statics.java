@@ -1,5 +1,7 @@
 package com.blockout22.evolution;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -9,8 +11,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.blockout22.evolution.entity.Entity;
 
 import java.util.Random;
 
@@ -26,7 +32,10 @@ public class Statics {
     public static Color defaultColor = new Color(1, 1, 1, 1);
     private static Vector2 actorPosVec = new Vector2();
 
-//    public static Array<Entity> entities;
+    public static Array<Entity> entities = new Array<Entity>();
+    public static Stage overlayStage = new Stage(new ScreenViewport());
+
+    public static Preferences prefs;
 
     //Strings
     public static String    TEXTURE_FEMALE = "female.jpg",
@@ -36,6 +45,7 @@ public class Statics {
                             TEXTURE_WATER = "water.png";
 
     public static String    SKIN_UI = "uiSkin/uiskin.json";
+    private static final String   SAVE_DATA = "saveData";
 
     public static void init()
     {
@@ -52,6 +62,7 @@ public class Statics {
         assetManager.load(TEXTURE_GRASS, Texture.class);
         assetManager.load(TEXTURE_DIRT, Texture.class);
         assetManager.load(TEXTURE_WATER, Texture.class);
+        prefs = Gdx.app.getPreferences(SAVE_DATA);
     }
 
     public static void load(String asset, Class type)
@@ -69,6 +80,8 @@ public class Statics {
 //        for (int i = 0; i < entities.size; i++) {
 //            entities.get(i).getSprite().getTexture().dispose();
 //        }
+        prefs.flush();
+        overlayStage.dispose();
         assetManager.dispose();
     }
 

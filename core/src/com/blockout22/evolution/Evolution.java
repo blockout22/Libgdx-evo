@@ -5,9 +5,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.blockout22.evolution.entity.Entity;
 import com.blockout22.evolution.entity.EntityHumanFemale;
 import com.blockout22.evolution.gui.DebugInfo;
@@ -24,7 +25,6 @@ public class Evolution extends ApplicationAdapter {
     private DebugInfo debugInfo;
 
 	private SpriteBatch batch;
-	private Stage overlay;
 	private Hud hud;
 	private ProgressWindow assetLoadingWindow;
 
@@ -37,9 +37,12 @@ public class Evolution extends ApplicationAdapter {
 
 	private InputAdapter input;
 
-	public static Array<Entity> entities = new Array<Entity>();
     private EntityHumanFemale e1;
 	int counter = 0;
+
+	//used to save data every x amount of seconds;
+    private long timer;
+    private long waitSaveTime = 5000;
 	
 	@Override
 	public void create () {
@@ -74,7 +77,6 @@ public class Evolution extends ApplicationAdapter {
 	private void load()
     {
         debugInfo = new DebugInfo();
-        overlay = new Stage(Statics.viewport);
         hud = new Hud("Hud");
 
         water = new WaterRender();
@@ -84,21 +86,28 @@ public class Evolution extends ApplicationAdapter {
         Vector3 pos = new Vector3((int)(Math.random() * maxXRange), (int)(Math.random() * maxYRange), 0);
         Statics.camera.position.set(pos);
 
-//        overlay.addActor(hud);
+        hud.setFillParent(true);
+        hud.align(Align.bottom);
+        Statics.overlayStage.addActor(hud);
 
+        Table info = new Table();
+        info.setFillParent(true);
         textInfo = new VisLabel();
         textInfo.setX(0);
-        overlay.addActor(textInfo);
-        System.out.println(textInfo.getPrefHeight());
-        textInfo.setY(Gdx.graphics.getHeight() - textInfo.getPrefHeight() / 2);
+        info.add(textInfo);
+        info.align(Align.topLeft);
+        Statics.overlayStage.addActor(info);
+//        textInfo.setY(Gdx.graphics.getHeight() - textInfo.getPrefHeight() / 2);
 
         Statics.camera.update();
-        Gdx.input.setInputProcessor(new InputMultiplexer(overlay, debugInfo.getStage(), input));
+        Gdx.input.setInputProcessor(new InputMultiplexer(Statics.overlayStage, debugInfo.getStage(), input));
 
         e1 = new EntityHumanFemale();
 //        e1.transform.scale.set(1, 1);
 //        e1.transform.size.set(1, 1);
 //        entities.add(e1);
+
+        timer = System.currentTimeMillis();
     }
 
     public boolean entityOnTile(Entity e){
@@ -124,6 +133,12 @@ public class Evolution extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
+        Statics.overlayStage.getViewport().update(width, height, true);
+
+        if(debugInfo != null){
+	        debugInfo.getStage().getViewport().update(width, height, true);
+        }
+
         Statics.viewport.update(width, height, false);
         Statics.camera.viewportWidth = Statics.viewport.getWorldWidth();
         Statics.camera.viewportHeight = Statics.viewport.getWorldHeight();
@@ -168,7 +183,7 @@ public class Evolution extends ApplicationAdapter {
             //render map
             worldMap.render(batch);
             //render entities
-            for(Entity e : entities){
+            for(Entity e : Statics.entities){
 //                batch.draw(e.getSprite(), e.transform.position.x, e.transform.position.y);
                 Statics.batchRenderTextureTransform(batch, e);
                 e.update();
@@ -179,17 +194,24 @@ public class Evolution extends ApplicationAdapter {
         }
         batch.end();
 
-        textInfo.setText("FPS: " + Gdx.graphics.getFramesPerSecond() + " Counter Population: " + entities.size);
+        textInfo.setText("FPS: " + Gdx.graphics.getFramesPerSecond() + " Counter Population: " + Statics.entities.size);
 
 
         //render overlay
 //        debugInfo.draw();
 //        overlay.act();
-        overlay.draw();
+        hud.update();
+        Statics.overlayStage.draw();
 
         assetLoadingWindow.setShowing(loading, false);
 
         Gdx.graphics.setTitle("FPS: " + Gdx.graphics.getFramesPerSecond() + " : " + Statics.camera.position);
+
+        if(TimeUtils.timeSinceMillis(timer) > waitSaveTime){
+            timer = System.currentTimeMillis();
+            Statics.prefs.flush();
+            System.out.println("Game Saved");
+        }
 
 //        if (Gdx.graphics.getFramesPerSecond() < 60) {
 //            Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS " + Statics.entities.size + " Entities "  + " WARNING: [FPS IS BELOW 60]");
@@ -207,7 +229,6 @@ public class Evolution extends ApplicationAdapter {
 	    assetLoadingWindow.dispose();
 	    Statics.dispose();
 	    batch.dispose();
-	    overlay.dispose();
 	    VisUI.dispose();
 	}
 }

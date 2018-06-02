@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.blockout22.evolution.Statics;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
@@ -13,7 +14,7 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 public class DebugInfo {
 
     private Stage stage;
-    private Table table;
+    private Table root, table;
     private VisScrollPane scroll;
     private VisLabel version;
     private VisLabel libGdxVersion;
@@ -28,8 +29,9 @@ public class DebugInfo {
 
     public DebugInfo()
     {
-        stage = new Stage(Statics.viewport);
+        stage = new Stage(new ScreenViewport());
         table = new Table();
+        root = new Table();
         scroll = new VisScrollPane(table);
 
         version = new VisLabel(Statics.GAME_NAME + ": " + Statics.VERSION);
@@ -37,7 +39,8 @@ public class DebugInfo {
         javaVersion = new VisLabel("Java: " + System.getProperty("java.version"));
         displaySize = new VisLabel("Display Size: " + displayWidth + "x" + displayHeight);
 
-        stage.addActor(scroll);
+        stage.addActor(root);
+        root.add(scroll);
 //        scroll.setSize(300, 300);
         table.add(version).left();
         table.row();
@@ -47,11 +50,15 @@ public class DebugInfo {
         table.row();
         table.add(displaySize).left();
 
-        table.align(Align.bottomLeft).pad(10);
-        table.debugAll();
+//        table.align(Align.bottomLeft).pad(10);
+//        table.debugAll();
         scroll.setFadeScrollBars(false);
-        scrollPos.set(0, 0);
-
+//        scrollPos.set(0, 0);
+//        table.setFillParent(true);
+//        scroll.setFillParent(true);
+        root.setFillParent(true);
+        root.align(Align.topRight);
+        version.setSize(10, 10);
     }
 
     public Stage getStage()
@@ -67,31 +74,31 @@ public class DebugInfo {
             displayWidth = Gdx.graphics.getWidth();
             updateDisplaySize = true;
         }
-
+//
         if(displayHeight != Gdx.graphics.getHeight()){
             displayHeight = Gdx.graphics.getHeight();
             updateDisplaySize = true;
         }
-
+//
         if(updateDisplaySize){
             displaySize.setText("Display Size: " + displayWidth + "x" + displayHeight);
             scroll.setWidth(table.getMinWidth() + 26 * 2 + scroll.getScrollBarWidth() * 2);
-
-//                stage.getCamera().viewportWidth = displayWidth;
-//                stage.getCamera().viewportHeight = displayHeight;
-
-            Statics.moveActorToBottomLeft(stage.getCamera(), Statics.viewport, scroll);
-//            scrollPos.set(0, 0);
-//            Statics.viewport.unproject(scrollPos);
-//            scroll.setX(scrollPos.x);
-//            scroll.setY(Statics.viewport.getMinWorldHeight() - scrollPos.y);
-//            if(x > 0){
-//                scroll.setX(-(x / 2));
-//            }
 //
-//            if(y > 0){
-//                scroll.setY(-(y / 2));
-//            }
+////                stage.getCamera().viewportWidth = displayWidth;
+////                stage.getCamera().viewportHeight = displayHeight;
+//
+//            Statics.moveActorToBottomLeft(stage.getCamera(), Statics.viewport, scroll);
+////            scrollPos.set(0, 0);
+////            Statics.viewport.unproject(scrollPos);
+////            scroll.setX(scrollPos.x);
+////            scroll.setY(Statics.viewport.getMinWorldHeight() - scrollPos.y);
+////            if(x > 0){
+////                scroll.setX(-(x / 2));
+////            }
+////
+////            if(y > 0){
+////                scroll.setY(-(y / 2));
+////            }
         }
 
         stage.act();
